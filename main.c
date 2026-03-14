@@ -20,9 +20,6 @@ int main(void) {
     TIM2 -> PSC = 1599;
     TIM2 -> ARR = 199;
 
-    // Set the CCR Value to 
-    TIM2 -> CCR1 = 20;
-
     // Set the CCMR1 as an output by setting CC1S to 00
     TIM2 -> CCMR1 &= ~TIM_CCMR1_CC1S_Msk;
 
@@ -40,10 +37,32 @@ int main(void) {
     TIM2 -> CR1 |= TIM_CR1_CEN;
 
 
+    uint32_t stage = 0;
     while (1) {
-        
+        switch (stage) {
+        case 0:
+            TIM2 -> CCR1 = 15;
+            break;
+        case 1:
+            TIM2 -> CCR1 = 20;
+            break;
+        case 2:
+            TIM2 -> CCR1 = 15;
+            break;
+        default:
+            break;
+        }
+       
+        if (stage > 2) {
+            stage = 0;
+        }
+
+        for (volatile int i = 0; i < 25000; i++) {
+        }
+        stage++;
     };
 }
+
 
 /* Stub for -nostdlib compilation to satisfy the Reset_Handler in startup_stm32f411xe.s */
 void __libc_init_array(void) { /* Empty stub */ }
